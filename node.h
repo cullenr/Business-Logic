@@ -32,7 +32,7 @@ class NIdentifier : public NExpression
 {
 public:
 	std::string name;
-	NIdentifier(const std::string& name) : name(name) { std::cout << "Creating Identifier: " << std::endl; }
+	NIdentifier(const std::string& name) : name(name) { std::cout << "Creating Identifier: " << name << std::endl; }
 };
 
 class NAssignment : public NExpression 
@@ -48,7 +48,7 @@ class NDouble : public NExpression
 {
 public:
 	double value;
-	NDouble(double value) : value(value) {std::cout << "Creating Double: " << std::endl; }
+	NDouble(double value) : value(value) {std::cout << "Creating Double: " << value << std::endl; }
 };
 
 class NExpressionStatement : public NStatement
@@ -67,13 +67,12 @@ public:
 	NExpressionVariableDeclaration(NIdentifier type, NExpression &expression) : type(type), assignExpression(assignExpression) { std::cout << "Creating Expression variable declaration: " << std::endl;}
 };
 
-class NBinaryOperation : public NStatement
+class NBinaryOperation : public NExpression
 {
 public:
-	NIdentifier &type;
-	NExpression &assignExpression;
+	NExpression &lhs;
+	NExpression &rhs;
+	char op;
 
-	NExpressionVariableDeclaration(NIdentifier type, NExpression &expression) : type(type), assignExpression(assignExpression) { std::cout << "Creating Expression variable declaration: " << std::endl;}
+	NBinaryOperation(NExpression &lhs, char op, NExpression &rhs) : lhs(lhs), op(op), rhs(rhs){ std::cout << "Creating Binary Operation " << std::endl;}
 };
-
-
