@@ -1,0 +1,1 @@
+rm parser.hpp parser.cpp tokens.cpp parser
