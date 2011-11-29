@@ -10,7 +10,7 @@
 	
 	void yyerror(const char *s) 
 	{ 
-		std::printf("NO! yoo Error'd wiv a : %s\n", s);
+		std::printf("\033[0;31mSHIT!\033[0m : %s\n", s);
 		std::exit(1);
 	}
 	
@@ -29,7 +29,8 @@
 {
 	std::string *	string;
 	int 			token;
-
+	char 			op;
+	
 	NDouble *		number;
 	NIdentifier *	identifier;
 	NStatement *	statement;
@@ -38,22 +39,24 @@
 
 /* Terminal Tokens */
 %token <string> IDENTIFIER DOUBLE NEWLINE 
-%token <token> VARIBLE_DECLARATION ADD
+%token <token> VARIBLE_DECLARATION
 
 /* Non - Terminal Types */
 %type <exp> exp primary_expression
-%type <statement> statement 
+%type <statement> statement
+%type <op> op '+' '-' '*' '/'
 
 /* 	
 	Precedence is defined by the order in which these declarations are made, 
-	the associativity is govoured by the %left or %right 
+	the associativity is determined by the %left or %right
+	
+	consider		1 - 1 - 1
+	%left 			(1 - 1) -1
+	%right			1 - (1 - 1)
 */
-%nonassoc '='
+%right '='
 %left '-' '+'
 %left '*' '/'
-%left NEG     /* negation--unary minus */
-%right '^'    /* exponentiation */
-
 
 %%
 program
@@ -74,6 +77,13 @@ primary_expression
 exp	
 	: primary_expression							{ $$ = $1; }
 	| IDENTIFIER '=' exp							{ $$ = new NAssignment(*$<identifier>1, *$3); }//TODO : DO I NEED STILL TO TREAT ASSIGNMENT DIFFERENTLY TO OTHER OPERATORS?
-	| primary_expression ADD exp					{ $$ = new NBinaryOperation(*$1, '+', *$3); }
+	| primary_expression op exp						{ $$ = new NBinaryOperation(*$1, $2, *$3); }
+	;
+	
+op
+	: '+'											{ $$ = $1 }
+	| '-'											{ $$ = $1 }
+	| '*'											{ $$ = $1 }
+	| '/'											{ $$ = $1 }
 	;
 %%

@@ -17,8 +17,7 @@ int checkKeyword(string identifier);
 						}
 [0-9]+(\.[0-9]*)?       {	
 							yylval.string = new std::string(yytext, yyleng); 
-							std::cout << "NUMBAR " << *yylval.string << std::endl; 
-							
+							std::cout << "NUMBER " << *yylval.string << std::endl; 
 							
 							return DOUBLE; 
 						}
@@ -42,7 +41,6 @@ int checkKeyword(string identifier);
 															
 							return id;
 						}
-\+						{   std::cout << "ADD " << yytext[0] << std::endl; return ADD; }
 .             			{
 							std::cout << "SINGLE " << yytext[0] << std::endl;	
 							return yytext[0];/* all ASCII characters are defined for us alrea, all other tokens we create are assigned IDS > 256 (the last ASCII character)*/
